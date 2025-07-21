@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Benny（首昊）— CTO完整技術簡報</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 0;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: slideInDown 1s ease-out;
+        }
+
+        .header .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .main-content {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        .section {
+            margin-bottom: 50px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .section:nth-child(1) { animation-delay: 0.8s; }
+        .section:nth-child(2) { animation-delay: 1s; }
+        .section:nth-child(3) { animation-delay: 1.2s; }
+
+        .section-title {
+            font-size: 2.5rem;
+            color: #4a5568;
+            margin-bottom: 30px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+            background: linear-gradient(to bottom, #667eea, #764ba2);
+            border-radius: 3px;
+        }
+
+        .subsection {
+            margin-bottom: 35px;
+            padding: 25px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-left: 4px solid #667eea;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .subsection:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .subsection-title {
+            font-size: 1.8rem;
+            color: #2d3748;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .icon {
+            font-size: 1.5rem;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 50%;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .list-item {
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        .list-item:hover {
+            background: #f7fafc;
+            margin: 0 -15px;
+            padding-left: 27px;
+            border-radius: 8px;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #667eea, #764ba2);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 20px 0;
+            margin-left: 20px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -27px;
+            top: 25px;
+            width: 12px;
+            height: 12px;
+            background: #667eea;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px #667eea;
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .project-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border-top: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .project-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .project-period {
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .project-role {
+            background: #e6fffa;
+            color: #00695c;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .tag {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .roadmap-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .roadmap-table th {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .roadmap-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .roadmap-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .roadmap-table tr:hover {
+            background: #f7fafc;
+        }
+
+        .year-badge {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+            
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            color: white;
+            margin-top: 40px;
+        }
+
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .scroll-to-top.visible {
+            opacity: 1;
+        }
+
+        .scroll-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🎯 Benny（首昊）— 技術簡報</h1>
+            <p class="subtitle">AI賦能整合者 | 軟體架構師 | 自動化系統平台設計者 | 現場支援專家</p>
+        </header>
+
+        <main class="main-content">
+            <!-- 一、個人核心能力簡歷 -->
+            <section class="section">
+                <h2 class="section-title">一、個人核心能力簡歷</h2>
+                
+                <div class="subsection">
+                    <h3 class="subsection-title">
+                        <span class="icon">🌟</span>
+                        個人定位簡介
+                    </h3>
+                    <p style="font-size: 1.1rem; color: #4a5568; line-height: 1.8;">
+                        整合跨領域技術，結合 AI 賦能與自動化架構設計，協同硬體、現場設備、AI 團隊與企業客戶，快速落地智能自動化解決方案。擅長系統平台架構設計，並善用 AI 工具大幅提升開發效率與交付品質。
+                    </p>
+                </div>
+
+                <div class="content-grid">
+                    <div class="card">
+                        <h4 class="card-title">
+                            🎯 核心專業領域
+                        </h4>
+                        <div class="list-item">• AI賦能自動化系統整合與架構設計</div>
+                        <div class="list-item">• 跨平台設備通訊整合與軟硬協同控制</div>
+                        <div class="list-item">• 現場導入支援與設備通訊問題快速除錯</div>
+                        <div class="list-item">• 工業自動化管理系統開發與落地交付</div>
+                        <div class="list-item">• 資料整合平台與邊緣運算實務應用</div>
+                    </div>
+
+                    <div class="card">
+                        <h4 class="card-title">
+                            🧩 技術整合與架構設計
+                        </h4>
+                        <div class="list-item"><span class="highlight">通訊整合</span>：SECS/GEM、MC Protocol、Modbus TCP、MQTT、HTTP API</div>
+                        <div class="list-item"><span class="highlight">軟硬整合</span>：架構規劃、通訊控制邏輯與參數管理</div>
+                        <div class="list-item"><span class="highlight">IoT數據整合</span>：邊緣運算平台部署</div>
+                        <div class="list-item"><span class="highlight">架構設計</span>：Clean Architecture、DDD、模組化平台設計</div>
+                    </div>
+
+                    <div class="card">
+                        <h4 class="card-title">
+                            🖥 軟體開發實務
+                        </h4>
+                        <div class="list-item"><span class="highlight">後端開發</span>：.NET Core, ASP.NET, C#, Python</div>
+                        <div class="list-item"><span class="highlight">前端開發</span>：React, Vite, TypeScript</div>
+                        <div class="list-item"><span class="highlight">資料庫管理</span>：MSSQL、PostgreSQL、MySQL、EF Core</div>
+                        <div class="list-item"><span class="highlight">測試與維運</span>：AI生成單元測試、自動部署（CI/CD）</div>
+                    </div>
+
+                    <div class="card">
+                        <h4 class="card-title">
+                            🤖 AI賦能開發效率提升
+                        </h4>
+                        <div class="list-item">• AI開發工具應用：GitHub Copilot、ChatGPT、Prompt Engineering</div>
+                        <div class="list-item">• AI輔助需求分析與架構藍圖建模</div>
+                        <div class="list-item">• AI設計文件自動生成（架構圖、API文件、流程圖）</div>
+                    </div>
+
+                    <div class="card">
+                        <h4 class="card-title">
+                            🏭 現場整合與交付經驗
+                        </h4>
+                        <div class="list-item">• 現場實機測試、通訊問題定位、參數驗證</div>
+                        <div class="list-item">• 系統整合錯誤快速分析與驗收支援</div>
+                        <div class="list-item">• 與現場工程師、設備商協作完成落地交付</div>
+                    </div>
+
+                    <div class="card">
+                        <h4 class="card-title">
+                            📊 專案管理與跨域溝通能力
+                        </h4>
+                        <div class="list-item">• 技術專案管理與交付節點控管</div>
+                        <div class="list-item">• 技術翻譯與整合窗口跨部門協調</div>
+                        <div class="list-item">• 對客戶與投資人進行技術與商業價值簡報</div>
+                    </div>
+                </div>
+            </section>
+
+	    <!-- 二、3年技術發展提案 -->
+	              <section class="section">
+	                  <h2 class="section-title">二、3年技術發展提案</h2>
+                
+	                  <div class="subsection">
+	                      <h3 class="subsection-title">
+	                          <span class="icon">1️⃣</span>
+	                          技術發展三年藍圖
+	                      </h3>
+	                      <table class="roadmap-table">
+	                          <thead>
+	                              <tr>
+	                                  <th>年度</th>
+	                                  <th>技術重點</th>
+	                                  <th>預期效果與商業價值</th>
+	                              </tr>
+	                          </thead>
+	                          <tbody>
+	                              <tr>
+	                                  <td><span class="year-badge">Y1 (現在)</span></td>
+	                                  <td><strong>建立自動化整合控制平台 1.0</strong></td>
+	                                  <td>
+	                                      ✅ 提升整合交付速度 50%<br>
+	                                      ✅ 節省現場導入人力成本 30%<br>
+	                                      ✅ 現場導入故障率下降 40%
+	                                  </td>
+	                              </tr>
+	                              <tr>
+	                                  <td><span class="year-badge">Y1</span></td>
+	                                  <td><strong>通訊協定模組封裝標準化</strong></td>
+	                                  <td>
+	                                      ✅ 各整合專案可重用通訊模組<br>
+	                                      ✅ 介接新廠商/新設備時開發工時縮短 70%
+	                                  </td>
+	                              </tr>
+	                              <tr>
+	                                  <td><span class="year-badge">Y2</span></td>
+	                                  <td><strong>AI 輔助整合交付工具 1.0</strong></td>
+	                                  <td>
+	                                      ✅ 技術團隊交付能力倍增<br>
+	                                      ✅ 同時並行專案量增加 2~3倍<br>
+	                                      ✅ AI自動產生架構設計/文件/測試腳本
+	                                  </td>
+	                              </tr>
+	                              <tr>
+	                                  <td><span class="year-badge">Y2</span></td>
+	                                  <td><strong>多模態控制協同架構開發</strong></td>
+	                                  <td>
+	                                      ✅ 完成第一版人形機器人運動控制核心<br>
+	                                      ✅ 各控制模組協同演算效率提升
+	                                  </td>
+	                              </tr>
+	                              <tr>
+	                                  <td><span class="year-badge">Y3</span></td>
+	                                  <td><strong>平台模組商業授權產品化</strong></td>
+	                                  <td>
+	                                      ✅ 開始對外授權模組產品<br>
+	                                      ✅ 年授權收益穩定化
+	                                  </td>
+	                              </tr>
+	                              <tr>
+	                                  <td><span class="year-badge">Y3</span></td>
+	                                  <td><strong>AI 自動交付系統全流程落地</strong></td>
+	                                  <td>
+	                                      ✅ 導入全自動交付引擎<br>
+	                                      ✅ 交付準備期從 2~3個月壓縮到 2~3週<br>
+	                                      ✅ 交付過程品質穩定性大幅提升
+	                                  </td>
+	                              </tr>
+	                          </tbody>
+	                      </table>
+	                  </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">
+                        <span class="icon">2️⃣</span>
+                        已累積實戰整合經驗
+                    </h3>
+                    <div class="project-grid">
+                        <div class="project-card">
+                            <div class="project-title">AMR 工程運搬無人化專案</div>
+                            <div class="project-period">2025~進行中</div>
+                            <div class="project-role">技術整合負責</div>
+                            <p>AMR任務規劃、運搬流程整合、AI積本應用</p>
+                        </div>
+
+                        <div class="project-card">
+                            <div class="project-title">PIS 生產指示系統</div>
+                            <div class="project-period">2024~進行中</div>
+                            <div class="project-role">架構設計負責人</div>
+                            <p>Clean Architecture落地、AI知識抽取、排程整合、LLM資料抽取</p>
+                        </div>
+
+                        <div class="project-card">
+                            <div class="project-title">EMS 溫濕度監控系統</div>
+                            <div class="project-period">2023~進行中</div>
+                            <div class="project-role">系統整合設計</div>
+                            <p>IoT整合、即時異常通知、AI內容抽取分析</p>
+                        </div>
+
+                        <div class="project-card">
+                            <div class="project-title">SECS-GEM Stocker Communication</div>
+                            <div class="project-period">2024~暫停中</div>
+                            <div class="project-role">SECS整合負責</div>
+                            <p>SECS/GEM協定整合、Host-STC介面設計、積本封裝</p>
+                        </div>
+
+                        <div class="project-card">
+                            <div class="project-title">WMS 倉儲管理系統</div>
+                            <div class="project-period">2021~2023</div>
+                            <div class="project-role">系統開發負責人</div>
+                            <p>倉儲出入庫、ERP整合、盤點管理、保質期控管</p>
+                        </div>
+
+                        <div class="project-card">
+                            <div class="project-title">SFC 生產控制系統</div>
+                            <div class="project-period">2021~2022</div>
+                            <div class="project-role">系統開發負責人</div>
+                            <p>生產排程、追溯管理、品質監控、資料分析</p>
+                        </div>
+
+                        <div class="project-card">
+                            <div class="project-title">智慧路燈管理專案</div>
+                            <div class="project-period">2018~2020</div>
+                            <div class="project-role">全端開發</div>
+                            <p>IoT路燈控制、碳排監控、資產地圖整合</p>
+                        </div>
+
+                        <div class="project-card">
+                            <div class="project-title">台北市路燈管理專案</div>
+                            <div class="project-period">2018~2021</div>
+                            <div class="project-role">核心開發</div>
+                            <p>大型資產管線管理、超大型高併發控制</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">
+                        <span class="icon">3️⃣</span>
+                        AI-Integration Framework 現況成果
+                    </h3>
+                    <div class="content-grid">
+                        <div class="card">
+                            <h4 class="card-title">AI 知識抽取範本</h4>
+                            <p>已完成 PIS、EMS、AMR、SECS-GEM、產線流程樣板</p>
+                        </div>
+                        <div class="card">
+                            <h4 class="card-title">Clean Architecture 落地</h4>
+                            <p>生產指示系統完整落地 Clean 架構積本</p>
+                        </div>
+                        <div class="card">
+                            <h4 class="card-title">模組化管理</h4>
+                            <p>共用積本架構標準化 (V1~V5)</p>
+                        </div>
+                        <div class="card">
+                            <h4 class="card-title">文件自動生成</h4>
+                            <p>架構圖、API 文件、交付文件自動產出</p>
+                        </div>
+                        <div class="card">
+                            <h4 class="card-title">模組跨專案場域驗證</h4>
+                            <p>各整合模組已實際應用驗證並持續擴展</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">
+                        <span class="icon">4️⃣</span>
+                        可商業化技術模組
+                    </h3>
+                    <div class="content-grid">
+                        <div class="card">
+                            <h4 class="card-title">自動化整合控制平台</h4>
+                            <p>工廠自動化、物流倉儲、自動運搬整合控制授權</p>
+                        </div>
+                        <div class="card">
+                            <h4 class="card-title">AI輔助整合交付工具</h4>
+                            <p>內部交付加速器 / 顧問技術授權</p>
+                        </div>
+                        <div class="card">
+                            <h4 class="card-title">多模態運動控制平台</h4>
+                            <p>人形機器人運動控制底層核心</p>
+                        </div>
+                        <div class="card">
+                            <h4 class="card-title">邊緣數據整合平台</h4>
+                            <p>IoT 即時決策與數據中樞平台</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">
+                        <span class="icon">5️⃣</span>
+                        技術護城河形成邏輯
+                    </h3>
+                    <div class="content-grid">
+                        <div class="card">
+                            <h4 class="card-title">現場整合 Know-how</h4>
+                            <p>現場實戰整合經驗、異常收斂能力</p>
+                        </div>
+                        <div class="card">
+                            <h4 class="card-title">平台架構控制權</h4>
+                            <p>核心架構設計自主可控</p>
+                        </div>
+                        <div class="card">
+                            <h4 class="card-title">AI輔助整合模型</h4>
+                            <p>AI 驅動整合交付全流程自我強化</p>
+                        </div>
+                        <div class="card">
+                            <h4 class="card-title">技術品牌影響力</h4>
+                            <p>持續專案實績與對外技術曝光形成領先認知</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subsection-title">
+                        <span class="icon">6️⃣</span>
+                        技術發展總結願景
+                    </h3>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <strong>穩定支撐短中期自動化整合專案交付</strong>
+                            <p>建立可靠的技術基礎與交付能力</p>
+                        </div>
+                        <div class="timeline-item">
+                            <strong>成為未來人形機器人感知與控制平台核心</strong>
+                            <p>技術前瞻佈局，搶佔未來市場先機</p>
+                        </div>
+                        <div class="timeline-item">
+                            <strong>建立 AI積本式整合開發框架商業產品線</strong>
+                            <p>形成可複製、可擴展的商業模式</p>
+                        </div>
+                        <div class="timeline-item">
+                            <strong>形成長期技術積累與難以取代的交付優勢</strong>
+                            <p>建立持續競爭優勢與技術護城河</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>© 2025 Benny（首昊）技術簡報 | AI賦能整合者 | 軟體架構師</p>
+        </footer>
+    </div>
+
+    <button class="scroll-to-top" id="scrollToTop">↑</button>
+
+    <script>
+        // 滾動到頂部功能
+        const scrollToTopBtn = document.getElementById('scrollToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollToTopBtn.classList.add('visible');
+            } else {
+                scrollToTopBtn.classList.remove('visible');
+            }
+        });
+
+        scrollToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // 平滑滾動動畫
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // 卡片hover效果增強
+        document.querySelectorAll('.card, .project-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this
